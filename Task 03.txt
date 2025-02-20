@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .stopwatch {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch">00:00:000</div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+
+    <script>
+        let timer;
+        let startTime;
+        let elapsedTime = 0;
+        let running = false;
+
+        function updateTime() {
+            const currentTime = Date.now() - startTime + elapsedTime;
+            const minutes = Math.floor(currentTime / 60000);
+            const seconds = Math.floor((currentTime % 60000) / 1000);
+            const milliseconds = currentTime % 1000;
+            document.querySelector('.stopwatch').textContent = 
+                `${String(minutes).padStart(2, '0')}:` +
+                `${String(seconds).padStart(2, '0')}:` +
+                `${String(milliseconds).padStart(3, '0')}`;
+        }
+
+        function startTimer() {
+            if (!running) {
+                startTime = Date.now();
+                timer = setInterval(updateTime, 10);
+                running = true;
+            }
+        }
+
+        function pauseTimer() {
+            if (running) {
+                clearInterval(timer);
+                elapsedTime += Date.now() - startTime;
+                running = false;
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            elapsedTime = 0;
+            running = false;
+            document.querySelector('.stopwatch').textContent = "00:00:000";
+        }
+    </script>
+</body>
+</html>
